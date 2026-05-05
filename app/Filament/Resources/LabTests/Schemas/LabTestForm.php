@@ -20,7 +20,7 @@ class LabTestForm
                 TextInput::make('price')
                     ->required()
                     ->numeric()
-                    ->prefix('$'),
+                    ->prefix('₹'),
                 Toggle::make('fasting_required')
                     ->required(),
                 TextInput::make('sample_type'),

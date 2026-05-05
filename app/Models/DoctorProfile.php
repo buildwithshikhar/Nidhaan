@@ -11,6 +11,27 @@ class DoctorProfile extends Model
 {
     use SoftDeletes;
 
+    protected static function booted(): void
+    {
+        // Auto-assign Doctor role when a profile is created
+        static::created(function (DoctorProfile $profile) {
+            $user = $profile->user;
+            if ($user && ! $user->hasRole('Doctor')) {
+                $user->assignRole('Doctor');
+            }
+        });
+
+        // Also handle if user_id changes on update
+        static::updated(function (DoctorProfile $profile) {
+            if ($profile->wasChanged('user_id')) {
+                $user = $profile->user;
+                if ($user && ! $user->hasRole('Doctor')) {
+                    $user->assignRole('Doctor');
+                }
+            }
+        });
+    }
+
     protected $fillable = [
         'user_id',
         'specialization',

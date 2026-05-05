@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Head, useForm, usePage } from '@inertiajs/react';
 import AppNavbar from '@/Components/AppNavbar';
+import { formatCurrency } from '@/utils/currency';
 
 // Format "HH:MM:SS" → "H:MM AM/PM"
 function fmtTime(timeStr) {
@@ -103,7 +104,7 @@ export default function Show({ doctor }) {
                                 </div>
                                 <div className="rounded-xl border border-slate-100 bg-slate-50 px-4 py-2.5">
                                     <span className="block text-xs uppercase tracking-wider text-slate-400">Consultation Fee</span>
-                                    <strong className="text-slate-800">₹{Number(doctor.consultation_fee).toFixed(2)}</strong>
+                                    <strong className="text-slate-800">{formatCurrency(doctor.consultation_fee)}</strong>
                                 </div>
                             </div>
                         </div>

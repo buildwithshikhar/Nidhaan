@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\DoctorProfiles\Schemas;
 
+use App\Models\User;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
@@ -14,19 +15,34 @@ class DoctorProfileForm
         return $schema
             ->components([
                 Select::make('user_id')
-                    ->relationship('user', 'name')
-                    ->required(),
+                    ->label('Doctor User')
+                    ->options(
+                        User::role('Doctor')
+                            ->pluck('name', 'id')
+                            ->toArray()
+                    )
+                    ->searchable()
+                    ->required()
+                    ->helperText('Select an existing user with Doctor role'),
                 TextInput::make('specialization')
-                    ->required(),
+                    ->required()
+                    ->maxLength(255)
+                    ->placeholder('e.g., Cardiology'),
                 TextInput::make('experience_years')
                     ->required()
                     ->numeric()
-                    ->default(0),
+                    ->minValue(0)
+                    ->default(0)
+                    ->suffix('years'),
                 TextInput::make('consultation_fee')
                     ->required()
-                    ->numeric(),
+                    ->numeric()
+                    ->prefix('₹')
+                    ->minValue(0)
+                    ->step(0.01),
                 Textarea::make('availability_schedule')
-                    ->columnSpanFull(),
+                    ->columnSpanFull()
+                    ->placeholder('Enter availability in JSON format'),
             ]);
     }
 }

@@ -2,6 +2,7 @@ import AppNavbar from '@/Components/AppNavbar';
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import axios from 'axios';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { formatCurrency } from '@/utils/currency';
 
 // ---------------------------------------------------------------------------
 // Tiny toast system (no dependency)
@@ -267,7 +268,7 @@ export default function Index({ categories = [], products = [], featuredDoctors 
                                             <div className="min-w-0 flex-1">
                                                 <p className="truncate text-sm font-medium text-slate-900">{p.name}</p>
                                                 <p className="truncate text-xs text-slate-500">
-                                                    {p.brand || p.category?.name || '—'} · ₹{Number(p.price).toFixed(2)}
+                                                    {p.brand || p.category?.name || '—'} · {formatCurrency(p.price)}
                                                 </p>
                                             </div>
                                             <AddToCartButton
@@ -364,7 +365,7 @@ export default function Index({ categories = [], products = [], featuredDoctors 
                                             )}
                                             {doctor.consultation_fee && (
                                                 <span className="rounded-full bg-emerald-50 px-2.5 py-1 font-semibold text-emerald-700">
-                                                    ₹{Number(doctor.consultation_fee).toFixed(0)} consult
+                                                    {formatCurrency(doctor.consultation_fee)} consult
                                                 </span>
                                             )}
                                         </div>
@@ -492,7 +493,7 @@ export default function Index({ categories = [], products = [], featuredDoctors 
                                                 {p.brand ? ` · ${p.brand}` : ''}
                                             </p>
                                             <p className="mt-2 text-lg font-bold text-emerald-700">
-                                                ₹{Number(p.price).toFixed(2)}
+                                                {formatCurrency(p.price)}
                                             </p>
 
                                             {/* Server-connected Add to Cart */}

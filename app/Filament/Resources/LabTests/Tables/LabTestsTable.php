@@ -21,7 +21,7 @@ class LabTestsTable
                 TextColumn::make('name')
                     ->searchable(),
                 TextColumn::make('price')
-                    ->money()
+                    ->formatStateUsing(fn ($state) => '₹ ' . number_format((float) $state, 2))
                     ->sortable(),
                 IconColumn::make('fasting_required')
                     ->boolean(),

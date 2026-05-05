@@ -1,12 +1,7 @@
 import AppNavbar from '@/Components/AppNavbar';
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
-const fmt = (n) =>
-    new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(n);
+import { formatCurrency as fmt } from '@/utils/currency';
 
 // ---------------------------------------------------------------------------
 // Toast

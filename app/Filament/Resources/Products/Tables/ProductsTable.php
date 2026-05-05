@@ -25,7 +25,7 @@ class ProductsTable
                 TextColumn::make('slug')
                     ->searchable(),
                 TextColumn::make('price')
-                    ->money()
+                    ->formatStateUsing(fn ($state) => '₹ ' . number_format((float) $state, 2))
                     ->sortable(),
                 TextColumn::make('stock')
                     ->numeric()
@@ -48,6 +48,9 @@ class ProductsTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
+                \Filament\Tables\Filters\SelectFilter::make('category_id')
+                    ->relationship('category', 'name')
+                    ->label('Category'),
                 TrashedFilter::make(),
             ])
             ->recordActions([

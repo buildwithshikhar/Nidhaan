@@ -42,15 +42,17 @@ class DoctorAvailabilityController extends Controller
             abort(403, 'Doctor profile not found.');
         }
 
-        // Optional: Check if slot already exists to prevent duplicate exact slots
-        $exists = DoctorAvailability::where('doctor_profile_id', $doctorProfile->id)
+        // Check if slot overlaps with an existing slot
+        $overlapping = DoctorAvailability::where('doctor_profile_id', $doctorProfile->id)
             ->where('date', $request->date)
-            ->where('start_time', $request->start_time)
-            ->where('end_time', $request->end_time)
+            ->where(function ($query) use ($request) {
+                $query->where('start_time', '<', $request->end_time)
+                      ->where('end_time', '>', $request->start_time);
+            })
             ->exists();
 
-        if ($exists) {
-            return back()->withErrors(['date' => 'This exact availability slot already exists.']);
+        if ($overlapping) {
+            return back()->withErrors(['start_time' => 'This slot overlaps with an existing availability.']);
         }
 
         DoctorAvailability::create([

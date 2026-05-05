@@ -1,12 +1,7 @@
 import AppNavbar from '@/Components/AppNavbar';
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import { useCallback, useEffect, useState } from 'react';
-
-// ---------------------------------------------------------------------------
-// Constants
-// ---------------------------------------------------------------------------
-const fmt = (n) =>
-    new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(n);
+import { formatCurrency as fmt } from '@/utils/currency';
 
 const STATUS_PIPELINE = ['pending', 'processing', 'shipped', 'delivered'];
 

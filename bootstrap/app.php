@@ -16,6 +16,13 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
 
+        // Trust all proxies (ngrok, load balancers, etc.)
+        // HEADER_X_FORWARDED_TRAEFIK covers all X-Forwarded-* headers in Symfony 7.
+        $middleware->trustProxies(
+            '*',
+            \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_TRAEFIK,
+        );
+
         $middleware->web(append: [
             \App\Http\Middleware\HandleInertiaRequests::class,
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,

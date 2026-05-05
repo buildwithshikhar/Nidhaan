@@ -25,7 +25,7 @@ class DoctorProfilesTable
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('consultation_fee')
-                    ->numeric()
+                    ->formatStateUsing(fn ($state) => '₹ ' . number_format((float) $state, 2))
                     ->sortable(),
                 TextColumn::make('created_at')
                     ->dateTime()
@@ -41,6 +41,15 @@ class DoctorProfilesTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
+                \Filament\Tables\Filters\SelectFilter::make('specialization')
+                    ->options([
+                        'Cardiology' => 'Cardiology',
+                        'Dermatology' => 'Dermatology',
+                        'Neurology' => 'Neurology',
+                        'Pediatrics' => 'Pediatrics',
+                        'Orthopedics' => 'Orthopedics',
+                    ])
+                    ->label('Specialization'),
                 TrashedFilter::make(),
             ])
             ->recordActions([

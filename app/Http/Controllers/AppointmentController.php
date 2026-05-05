@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AppointmentRequest;
 use App\Models\Appointment;
 use App\Models\DoctorAvailability;
 use Illuminate\Http\Request;
@@ -10,17 +11,11 @@ use Illuminate\Support\Facades\DB;
 
 class AppointmentController extends Controller
 {
-    public function book(Request $request)
+    public function book(AppointmentRequest $request)
     {
-        $request->validate([
-            'doctor_profile_id' => ['required', 'exists:doctor_profiles,id'],
-            'date' => ['required', 'date'],
-            'availability_id' => ['required', 'exists:doctor_availabilities,id'], // time_slot
-        ]);
-
-        $availability = DoctorAvailability::where('id', $request->availability_id)
-            ->where('doctor_profile_id', $request->doctor_profile_id)
-            ->where('date', $request->date)
+        $availability = DoctorAvailability::where('id', $request->validated('availability_id'))
+            ->where('doctor_profile_id', $request->validated('doctor_profile_id'))
+            ->where('date', $request->validated('date'))
             ->where('is_booked', false)
             ->firstOrFail();
 
@@ -30,8 +25,8 @@ class AppointmentController extends Controller
 
             Appointment::create([
                 'user_id' => Auth::id(),
-                'doctor_profile_id' => $request->doctor_profile_id,
-                'appointment_date' => $request->date,
+                'doctor_profile_id' => $request->validated('doctor_profile_id'),
+                'appointment_date' => $request->validated('date'),
                 'time_slot' => $timeString,
                 'status' => 'pending',
             ]);
